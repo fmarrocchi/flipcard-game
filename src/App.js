@@ -23,6 +23,9 @@ class App extends Component{
         <div className="App">
           <header className="App-header" />
           <p>React FlipCard Game</p>
+          <div>
+            <button onClick={() => this.restart() }>Reiniciar </button>
+          </div>
           <p>Intentos: {this.state.intents}</p>
           <Board 
             deckOfCards={this.state.deckOfCards}
@@ -54,8 +57,7 @@ class App extends Component{
 
     compareSelectedPair(pairSelected){
       this.setState({
-        comparing: true,
-        intents: this.state.intents +1
+        comparing: true
       });
 
       setTimeout(() => {
@@ -70,14 +72,21 @@ class App extends Component{
             return {...card, discovered: true};
           });
         }
-        console.log("baraja: " + deckOfCards);
         this.setState({
           pairSelected: [],
           deckOfCards,
-          comparing: false
+          comparing: false,
+          intents: this.state.intents + 1
         });  
       }, 1000);
-  }
+    }
+
+    restart (){
+      let currenState = this;
+      currenState.setState(        
+       getInitialState()
+      )
+    }
 }
 
 export default App;
