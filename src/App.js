@@ -8,7 +8,8 @@ const getInitialState = () => {
   return {
     deckOfCards,
     pairSelected: [],
-    comparing: false
+    comparing: false,
+    intents: 0
   };
 }
 
@@ -22,6 +23,7 @@ class App extends Component{
         <div className="App">
           <header className="App-header" />
           <p>React FlipCard Game</p>
+          <p>Intentos: {this.state.intents}</p>
           <Board 
             deckOfCards={this.state.deckOfCards}
             pairSelected={this.state.pairSelected}
@@ -52,7 +54,8 @@ class App extends Component{
 
     compareSelectedPair(pairSelected){
       this.setState({
-        comparing: true
+        comparing: true,
+        intents: this.state.intents +1
       });
 
       setTimeout(() => {
