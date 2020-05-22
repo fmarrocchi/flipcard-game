@@ -71,6 +71,7 @@ class App extends Component{
             }
             return {...card, discovered: true};
           });
+          this.isWinner(deckOfCards);
         }
         this.setState({
           pairSelected: [],
@@ -86,6 +87,15 @@ class App extends Component{
       currenState.setState(        
        getInitialState()
       )
+    }
+
+    isWinner (deckOfCards){
+      console.log("entre");
+      /*Filter the deck of cards to get only cards that have not yet been discovered. 
+        If it is 0 we have discovered all*/
+      if( deckOfCards.filter((card) => !card.discovered).length === 0 ){
+        alert("WINNER!!!! You won in "+ this.state.intents + " intents! ")
+      }
     }
 }
 
