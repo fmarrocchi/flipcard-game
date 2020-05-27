@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import FlipCard from 'react-flipcard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './Card.css';
+import './Card.scss';
 
 export default class Card extends Component {
   render () {    

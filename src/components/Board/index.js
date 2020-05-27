@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Card from '../Card';
-import './Board.css';
+import './Board.scss';
 
 export default class Board extends Component{
   render() {    

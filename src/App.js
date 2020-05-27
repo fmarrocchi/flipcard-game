@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import './App.css';
+import './App.scss';
 import Board from './components/Board';
+import CurrentPlayer from './components/CurrentPlayer';
 import buildGame from './utils/buildGame';
 
 const getInitialState = () => {
@@ -9,7 +10,8 @@ const getInitialState = () => {
     deckOfCards,
     pairSelected: [],
     comparing: false,
-    intents: 0
+    intents: 0, 
+    name: ''
   };
 }
 
@@ -17,21 +19,36 @@ class App extends Component{
     constructor(props){
       super(props);
       this.state = getInitialState();
+      //binding the method restart. This binding is necessary to make `this` work in the callback
+      this.restart = this.restart.bind(this);
+      this.changePlayer = this.changePlayer.bind(this);
     }
     render(){
       return (        
         <div className="App">
-          <header className="App-header" />
-          <p>React FlipCard Game</p>
-          <div>
-            <button onClick={() => this.restart() }>Reiniciar </button>
-          </div>
-          <p>Intentos: {this.state.intents}</p>
-          <Board 
-            deckOfCards={this.state.deckOfCards}
-            pairSelected={this.state.pairSelected}
-            selectCard= { (card) => this.selectCard(card)}
-          />
+          <header className="App-header">
+            <nav>  
+              <button className="Change-player" onClick={this.changePlayer}>Change Player </button>
+            </nav>
+          </header>
+
+          <body>            
+            <h1>React FlipCard Game</h1>
+            <div>
+              <button onClick={this.restart}>Reiniciar </button>
+            </div>
+            <Board
+              deckOfCards={this.state.deckOfCards}
+              pairSelected={this.state.pairSelected}
+              selectCard= { (card) => this.selectCard(card)}
+            />
+
+            <CurrentPlayer 
+              name={this.state.name}
+              intents={this.state.intents}
+              changePlayer={this.changePlayer}
+            />
+          </body>
         </div>
       );
     }
@@ -83,14 +100,21 @@ class App extends Component{
     }
 
     restart (){
-      let currenState = this;
-      currenState.setState(        
+      let currentState = this;
+      currentState.setState(        
        getInitialState()
       )
     }
 
+    changePlayer(){
+      const newName = document.getElementById('newNameField').value;
+      console.log(newName);
+      this.setState({
+        name: newName
+      })
+    }
+
     isWinner (deckOfCards){
-      console.log("entre");
       /*Filter the deck of cards to get only cards that have not yet been discovered. 
         If it is 0 we have discovered all*/
       if( deckOfCards.filter((card) => !card.discovered).length === 0 ){
