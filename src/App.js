@@ -153,7 +153,7 @@ class App extends Component{
     isWinner (deckOfCards){
       /*Filter the deck of cards to get only cards that have not yet been discovered. 
         If it is 0 we have discovered all*/
-      if( deckOfCards.filter((card) => !card.discovered).length !== 0 ){
+      if( deckOfCards.filter((card) => !card.discovered).length === 0 ){
         alert("WINNER!!!! You won in "+ this.state.intents + " intents! ")
 
         let newPositions = [...this.state.positions];
