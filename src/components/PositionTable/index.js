@@ -5,14 +5,14 @@ export default class PositionTable extends Component {
     let positions = this.props.positions;
     return (
       <div className="Position-table"> 
-        <p> Positions Table</p>
-        {        
-        positions.map((player) => {
+      <p>Positions Table</p>
+       {        
+        positions.map((obj, index) => {
           return(
-            <span>              
-              <p>Player : {player[0]}</p>
-              <p>#Attempts: {player[1]}</p>
-            </span>);
+            <tr key= {index}>              
+              <td>#{index} {obj.name}</td>
+              <td> {obj.intents}</td>
+            </tr>)
           })
         }
       </div>         

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './App.scss';
 import buildGame from './utils/buildGame';
+import axios from './axios';
 import Board from './components/Board';
 import CurrentPlayer from './components/CurrentPlayer';
 import PositionTable from './components/PositionTable';
@@ -59,6 +60,14 @@ class App extends Component{
       );
     }
   
+    async componentDidMount() {
+      const response = await axios.get("?sortBy=intents");
+      
+      this.setState({
+        positions : response.data,
+      }) 
+    }
+
     selectCard(card) {
       if (
         this.state.comparing || 
@@ -146,9 +155,30 @@ class App extends Component{
         If it is 0 we have discovered all*/
       if( deckOfCards.filter((card) => !card.discovered).length !== 0 ){
         alert("WINNER!!!! You won in "+ this.state.intents + " intents! ")
-        
-        this.state.positions.push([this.state.name, this.state.intents]);
-        console.log("positions in app: " +this.state.positions);
+
+        let newPositions = [...this.state.positions];
+        //look if we already have a player with that name
+        let newWinner = newPositions.find(obj => obj.name === this.state.name); 
+
+        //if we have the player but with more intents OR dont have the player, we update 
+        if (newWinner && newWinner.intents > this.state.intents || !newWinner ){
+          console.log("en if");
+          if (newWinner){
+            newPositions = newPositions.filter( obj => obj.name !== this.state.name);
+            axios.put(newWinner.id,{itents: this.state.intents})
+          }else {
+            axios.post("", {
+              name: this.state.name,
+              intents: this.state.intents
+            })
+          }
+
+          newPositions.push({name: this.state.name, intents: this.state.intents });
+
+          this.setState({
+            positions: newPositions,
+          });
+        }
 
       }
       
