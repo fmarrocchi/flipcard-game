@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import './App.scss';
+import buildGame from './utils/buildGame';
 import Board from './components/Board';
 import CurrentPlayer from './components/CurrentPlayer';
-import buildGame from './utils/buildGame';
+import PositionTable from './components/PositionTable';
 
 const getInitialState = () => {
   const deckOfCards = buildGame();
@@ -11,7 +12,8 @@ const getInitialState = () => {
     pairSelected: [],
     comparing: false,
     intents: 0, 
-    name: ''
+    name: '',
+    positions: []
   };
 }
 
@@ -21,22 +23,23 @@ class App extends Component{
       this.state = getInitialState();
       //binding the method restart. This binding is necessary to make `this` work in the callback
       this.restart = this.restart.bind(this);
+      this.setPlayer = this.setPlayer.bind(this);
       this.changePlayer = this.changePlayer.bind(this);
+      this.resetPositions = this.resetPositions.bind(this);
     }
     render(){
       return (        
         <div className="App">
           <header className="App-header">
             <nav>  
-              <button className="Change-player" onClick={this.changePlayer}>Change Player </button>
+              <button onClick={this.resetPositions}>Reset Positions </button>
+              <button onClick={this.restart}>New Game</button>
+              <button onClick={this.changePlayer}>Change Player </button>
             </nav>
           </header>
 
           <body>            
             <h1>React FlipCard Game</h1>
-            <div>
-              <button onClick={this.restart}>Reiniciar </button>
-            </div>
             <Board
               deckOfCards={this.state.deckOfCards}
               pairSelected={this.state.pairSelected}
@@ -46,7 +49,10 @@ class App extends Component{
             <CurrentPlayer 
               name={this.state.name}
               intents={this.state.intents}
-              changePlayer={this.changePlayer}
+              setPlayer={this.setPlayer}
+            />
+            <PositionTable 
+              positions={this.state.positions}
             />
           </body>
         </div>
@@ -100,26 +106,52 @@ class App extends Component{
     }
 
     restart (){
-      let currentState = this;
-      currentState.setState(        
+      let currentState = this;      
+      let keepName = this.state.name;
+      let keepPositions = this.state.positions;
+      currentState.setState(       
        getInitialState()
-      )
+      );
+      currentState.setState({
+        positions: keepPositions
+      })
+      if (keepName !== ''){
+        currentState.setState({
+          name: keepName
+        })
+      }
+    }
+
+    setPlayer(){
+      const newName = document.getElementById('newNameField').value;
+      this.setState({
+        name: newName
+      })
     }
 
     changePlayer(){
-      const newName = document.getElementById('newNameField').value;
-      console.log(newName);
       this.setState({
-        name: newName
+        name:''
+      })
+    }
+
+    resetPositions(){
+      this.setState({
+        positions:[]
       })
     }
 
     isWinner (deckOfCards){
       /*Filter the deck of cards to get only cards that have not yet been discovered. 
         If it is 0 we have discovered all*/
-      if( deckOfCards.filter((card) => !card.discovered).length === 0 ){
+      if( deckOfCards.filter((card) => !card.discovered).length !== 0 ){
         alert("WINNER!!!! You won in "+ this.state.intents + " intents! ")
+        
+        this.state.positions.push([this.state.name, this.state.intents]);
+        console.log("positions in app: " +this.state.positions);
+
       }
+      
     }
 }
 

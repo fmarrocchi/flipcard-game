@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 
 export default class CurrentPlayer extends Component {
   render () {    
@@ -9,7 +8,7 @@ export default class CurrentPlayer extends Component {
         <aside className="Player-input">
           <p>Please enter yout name:</p>    
           <input type="text" id="newNameField"></input>
-          <button onClick= {this.props.changePlayer} >OK</button>
+          <button onClick= {this.props.setPlayer} >OK</button>
         </aside>
     )    
     else
